@@ -14,7 +14,7 @@
     //Defaults
     var pluginName = 'skylo',
         defaults = {
-            state: 'info', // Info, Success, Warning, Danger
+          state: 'info', // Info, Success, Warning, Danger
           inchSpeed: 200,  // Milliseconds
           initialBurst: 5,  // Range 1 - 100.
           flat: false
@@ -55,7 +55,7 @@
 
 
         $('<div/>',{
-            "class":"progress "+((this.options.flat) ? "" : "progress-striped active") +" skylo",
+            "class":"progress "+((this.options.flat) ? "" : "progress-striped active") +" skylo"
         }).append(body).appendTo('body');
 
         this._shown = true;
@@ -116,8 +116,26 @@
       return this._width;
     }
 
-    function _disappear(delay,callback){
 
+    Plugin.prototype.state = function(state){
+        if(this._shown){
+            var oldState = this.options.state;
+            this.options.state = state;
+            _validate(this.options);
+
+            var element = $('.progress.skylo .bar');
+            element.removeClass('progress-bar-'+oldState);
+            element.addClass('progress-bar-'+state);
+            element.removeClass('bar-'+oldState);
+            element.addClass('bar-'+state);
+        } else {
+            this.options.state = state;
+            _validate(this.options);
+        }
+    }
+
+
+    function _disappear(delay,callback) {
       callback = callback || null;
 
       setTimeout(function(){
